@@ -175,3 +175,7 @@ func (r *MongoRepository) Delete(ctx context.Context, id string) error {
 func (r *MongoRepository) Close() error {
 	return r.client.Disconnect(context.Background())
 }
+
+func (r *MongoRepository) Client() *mongo.Client {
+	return r.client
+}

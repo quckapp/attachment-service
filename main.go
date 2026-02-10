@@ -24,6 +24,9 @@ func main() {
 	}
 	defer repo.Close()
 
+	// Initialize extended repository (uses same MongoDB client)
+	extRepo := repository.NewExtendedRepository(repo.Client(), cfg.DatabaseName)
+
 	// Initialize storage backend (S3-compatible)
 	storageBackend, err := storage.NewS3Storage(cfg)
 	if err != nil {
@@ -51,6 +54,7 @@ func main() {
 
 	router := gin.Default()
 	api.RegisterRoutes(router, attachmentService, cfg)
+	api.RegisterExtendedRoutes(router, extRepo)
 
 	port := cfg.Port
 	log.Printf("Attachment service starting on port %s", port)
