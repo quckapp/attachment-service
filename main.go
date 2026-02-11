@@ -55,6 +55,7 @@ func main() {
 	router := gin.Default()
 	api.RegisterRoutes(router, attachmentService, cfg)
 	api.RegisterExtendedRoutes(router, extRepo)
+	api.RegisterExtendedRoutes2(router, extRepo, extRepo.Database())
 
 	port := cfg.Port
 	log.Printf("Attachment service starting on port %s", port)

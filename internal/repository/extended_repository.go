@@ -888,3 +888,19 @@ func (r *ExtendedRepository) CloneAttachment(ctx context.Context, attachment *mo
 	_, err := r.attachments.InsertOne(ctx, attachment)
 	return err
 }
+
+func (r *ExtendedRepository) AggregateAttachments(ctx context.Context, pipeline mongo.Pipeline) (*mongo.Cursor, error) {
+	return r.attachments.Aggregate(ctx, pipeline)
+}
+
+func (r *ExtendedRepository) FindAttachmentByID(ctx context.Context, id string, result *models.Attachment) error {
+	objID, err := primitive.ObjectIDFromHex(id)
+	if err != nil {
+		return err
+	}
+	return r.attachments.FindOne(ctx, bson.M{"_id": objID}).Decode(result)
+}
+
+func (r *ExtendedRepository) Database() *mongo.Database {
+	return r.db
+}
